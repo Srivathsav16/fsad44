@@ -6,25 +6,29 @@ function SignIn() {
   const navigate = useNavigate();
 
   const handleSuccess = (credentialResponse) => {
-    try {
-      const user = jwtDecode(credentialResponse.credential);
+    const user = jwtDecode(credentialResponse.credential);
 
-      const storedUser = JSON.parse(localStorage.getItem("user"));
+    const users =
+      JSON.parse(localStorage.getItem("users")) || [];
 
-      if (!storedUser || storedUser.email !== user.email) {
-        alert("Account not found. Please Sign Up first.");
-        return;
-      }
+    const existingUser = users.find(
+      (u) => u.email === user.email
+    );
 
-      if (storedUser.role === "faculty") {
-        navigate("/faculty-dashboard");
-      } else {
-        navigate("/student-dashboard");
-      }
+    if (!existingUser) {
+      alert("Account not found. Please Sign Up first.");
+      return;
+    }
 
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Login failed. Try again.");
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(existingUser)
+    );
+
+    if (existingUser.role === "faculty") {
+      navigate("/faculty-dashboard");
+    } else {
+      navigate("/student-dashboard");
     }
   };
 
@@ -32,15 +36,15 @@ function SignIn() {
     <div className="auth-wrapper">
       <div className="auth-card">
         <h2>TealEdge Learning</h2>
-        <h3>Sign In</h3>
-
-        <GoogleLogin
-          onSuccess={handleSuccess}
-          onError={() => alert("Google Login Failed")}
-        />
-
-        <p style={{ marginTop: "20px" }}>
-          New user? <Link to="/signup">Sign Up</Link>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center" }}>
+          <p style={{ color: "var(--text-muted)", marginBottom: "1rem" }}>Sign in to access your courses</p>
+          <GoogleLogin
+            onSuccess={handleSuccess}
+            onError={() => alert("Google Login Failed")}
+          />
+        </div>
+        <p style={{ marginTop: "2rem", color: "var(--text-muted)" }}>
+          New user? <Link to="/signup" style={{ color: "var(--primary)", fontWeight: "600", textDecoration: "none" }}>Sign Up</Link>
         </p>
       </div>
     </div>

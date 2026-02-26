@@ -10,7 +10,6 @@ function SignUp() {
   const [googleUser, setGoogleUser] = useState(null);
   const [name, setName] = useState("");
 
-  // After Google login
   const handleGoogleSuccess = (credentialResponse) => {
     if (!role) {
       alert("Please select a role first");
@@ -23,10 +22,21 @@ function SignUp() {
     setName(user.name || "");
   };
 
-  // Final registration
   const handleRegister = () => {
     if (!name.trim()) {
       alert("Please enter your name");
+      return;
+    }
+
+    const existingUsers =
+      JSON.parse(localStorage.getItem("users")) || [];
+
+    const alreadyExists = existingUsers.find(
+      (u) => u.email === googleUser.email
+    );
+
+    if (alreadyExists) {
+      alert("Account already exists. Please Sign In.");
       return;
     }
 
@@ -36,7 +46,10 @@ function SignUp() {
       role: role
     };
 
-    localStorage.setItem("user", JSON.stringify(newUser));
+    const updatedUsers = [...existingUsers, newUser];
+
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
 
     if (role === "faculty") {
       navigate("/faculty-dashboard");
@@ -51,30 +64,30 @@ function SignUp() {
         <h2>TealEdge Learning</h2>
 
         {!googleUser ? (
-          <>
-            <h3>Create Account</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center" }}>
+            <h3 style={{ color: "var(--text-main)", marginBottom: "0.5rem" }}>Create Account</h3>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginBottom: "1rem" }}>Select your role to get started</p>
 
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
+              style={{ marginBottom: "1rem" }}
             >
               <option value="">Select Role</option>
               <option value="student">Student</option>
               <option value="faculty">Faculty</option>
             </select>
 
-            <br /><br />
-
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => alert("Google Login Failed")}
             />
-          </>
+          </div>
         ) : (
-          <>
-            <h3>Complete Registration</h3>
+          <div style={{ textAlign: "left" }}>
+            <h3 style={{ color: "var(--text-main)", marginBottom: "1.5rem", textAlign: "center" }}>Complete Registration</h3>
 
-            <label>Full Name</label>
+            <label style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginLeft: "4px" }}>Full Name</label>
             <input
               type="text"
               value={name}
@@ -84,17 +97,16 @@ function SignUp() {
 
             <button
               className="btn"
-              style={{ marginTop: "15px" }}
+              style={{ marginTop: "1rem", width: "100%" }}
               onClick={handleRegister}
             >
               Finish Registration
             </button>
-          </>
+          </div>
         )}
 
-        <p style={{ marginTop: "20px" }}>
-          Already have an account?{" "}
-          <Link to="/">Sign In</Link>
+        <p style={{ marginTop: "2.5rem", color: "var(--text-muted)", fontSize: "0.9rem" }}>
+          Already have an account? <Link to="/" style={{ color: "var(--primary)", fontWeight: "600", textDecoration: "none" }}>Sign In</Link>
         </p>
       </div>
     </div>

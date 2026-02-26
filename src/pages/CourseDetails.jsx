@@ -5,7 +5,7 @@ import { useState } from "react";
 function CourseDetails() {
   const { id } = useParams();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("currentUser"));
   const courses = JSON.parse(localStorage.getItem("courses")) || [];
   const submissions =
     JSON.parse(localStorage.getItem("submissions")) || [];

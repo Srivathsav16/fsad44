@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import { useState } from "react";
 
 function Profile() {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const [name, setName] = useState(storedUser?.name || "");
   const [phone, setPhone] = useState(storedUser?.phone || "");

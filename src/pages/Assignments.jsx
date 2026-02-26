@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 
 function Assignments() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("currentUser"));
   const courses = JSON.parse(localStorage.getItem("courses")) || [];
   const enrollments =
     JSON.parse(localStorage.getItem("enrollments")) || [];

@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 
 function Dashboard() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("currentUser"));
 
   return (
     <>

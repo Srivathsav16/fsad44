@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function StudentDashboard() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("currentyUser"));
   const courses = JSON.parse(localStorage.getItem("courses")) || [];
   const enrollments =
     JSON.parse(localStorage.getItem("enrollments")) || [];
@@ -37,18 +37,19 @@ function StudentDashboard() {
       <Navbar />
 
       <div className="container">
-        <div className="card">
-          <h2>Student Dashboard</h2>
-          <p>
-            Welcome, <strong>{user?.name}</strong>
+        <div className="card glass-card">
+          <h2 className="text-gradient">Student Dashboard</h2>
+          <p style={{ color: "var(--text-muted)", marginTop: "0.5rem" }}>
+            Welcome back, <strong style={{ color: "var(--text-main)" }}>{user?.name}</strong>! Ready to continue your learning journey?
           </p>
         </div>
 
-        <h3>My Enrolled Courses</h3>
+        <h3 style={{ margin: "2rem 0 1rem 0", fontSize: "1.5rem" }}>My Enrolled Courses</h3>
 
         {myCourses.length === 0 && (
-          <div className="card">
-            <p>You have not enrolled in any courses yet.</p>
+          <div className="card" style={{ textAlign: "center", padding: "3rem" }}>
+            <p style={{ color: "var(--text-muted)" }}>You have not enrolled in any courses yet.</p>
+            <button className="btn" style={{ marginTop: "1rem" }} onClick={() => navigate("/courses")}>Browse Courses</button>
           </div>
         )}
 
@@ -66,25 +67,23 @@ function StudentDashboard() {
                 }
                 style={{ cursor: "pointer" }}
               >
-                <h3>{course.title}</h3>
-                <p>{course.description}</p>
+                <h3 style={{ marginBottom: "0.5rem", color: "var(--text-main)" }}>{course.title}</h3>
+                <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", height: "3rem", overflow: "hidden" }}>{course.description}</p>
 
-                <p>
-                  <strong>Total Tasks:</strong> {totalTasks}
-                </p>
-
-                <p>
-                  <strong>Progress:</strong> {progress}%
-                </p>
+                <div style={{ marginTop: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem" }}>
+                  <span style={{ color: "var(--text-muted)" }}>{totalTasks} Tasks</span>
+                  <span style={{ color: "var(--primary)", fontWeight: "600" }}>{progress}% Complete</span>
+                </div>
 
                 {/* Progress Bar */}
                 <div
                   style={{
-                    background: "#eee",
-                    borderRadius: "8px",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    borderRadius: "10px",
                     overflow: "hidden",
-                    height: "10px",
-                    marginTop: "8px"
+                    height: "8px",
+                    marginTop: "0.5rem",
+                    marginBottom: "1.5rem"
                   }}
                 >
                   <div
@@ -92,19 +91,20 @@ function StudentDashboard() {
                       width: `${progress}%`,
                       background:
                         progress === 100
-                          ? "#2ecc71"
-                          : "#118ab2",
+                          ? "var(--success)"
+                          : "linear-gradient(90deg, var(--primary), var(--secondary))",
                       height: "100%",
-                      transition: "0.4s"
+                      transition: "width 1s ease-in-out",
+                      boxShadow: progress > 0 ? "0 0 10px rgba(0, 210, 255, 0.5)" : "none"
                     }}
                   />
                 </div>
 
                 <button
                   className="btn"
-                  style={{ marginTop: "12px" }}
+                  style={{ width: "100%" }}
                 >
-                  Open Course
+                  Continue Learning
                 </button>
               </div>
             );
